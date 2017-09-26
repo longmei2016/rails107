@@ -27,6 +27,13 @@ class GroupsController < ApplicationController
     redirect_to groups_path, notice: 'Update Success' #  redirect_to group_path, notice: 'Update Success'   回到show页面
   end
 
+  def destroy
+    @group = Group.find(params[:id])
+    @group.destroy
+    flash[:alert] = 'Group deleted'
+    redirect_to groups_path # , alert: 'Group deleted'
+  end
+
   private
 
   def group_params
