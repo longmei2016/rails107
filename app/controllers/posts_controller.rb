@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+
   def new
     @group = Group.find(params[:group_id])
     @post = Post.new
@@ -19,6 +20,29 @@ class PostsController < ApplicationController
 
   def show
     @group = Group.find(params[:group_id])
+  end
+
+  def edit
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+    @post.destroy
+    flash[:alert] = 'Post deleted'
+    redirect_to account_posts_path # , alert: 'Group deleted'
+  end
+
+  def update
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+    if @post.update(post_params)
+      redirect_to account_posts_path, notice: 'Update Success' #  redirect_to group_path, notice: 'Update Success'   回到show页面
+    else
+      render :edit
+    end
   end
 
   private
